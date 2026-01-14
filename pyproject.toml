@@ -11,13 +11,13 @@ full = [
     "openai",
     "anthropic",
     "groq",
-    "google-generativeai",
+    "google-genai",
     "botocore",
     "boto3",
 ]
 amazon = ["boto3", "botocore", "anthropic"]
 anthropic = ["anthropic"]
-gemini = ["google-generativeai", "jsonref"]
+gemini = ["google-genai"]
 groq = ["groq"]
 ollama = ["openai"]
 openai = ["openai"]
