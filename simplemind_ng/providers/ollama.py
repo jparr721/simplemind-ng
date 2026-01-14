@@ -46,12 +46,15 @@ class Ollama(BaseProvider):
         )
 
     @logger
-    def send_conversation(self, conversation: "Conversation", **kwargs) -> "Message":
+    def send_conversation(
+        self, conversation: "Conversation", **kwargs
+    ) -> "Message":
         """Send a conversation to the Ollama API."""
         from ..models import Message
 
         messages = [
-            {"role": msg.role, "content": msg.text} for msg in conversation.messages
+            {"role": msg.role, "content": msg.text}
+            for msg in conversation.messages
         ]
 
         request_kwargs = {
@@ -72,6 +75,25 @@ class Ollama(BaseProvider):
             llm_model=conversation.llm_model or self.DEFAULT_MODEL,
             llm_provider=self.NAME,
         )
+
+    @logger
+    def send_conversation_stream(self, conversation: "Conversation", **kwargs):
+        """Stream a conversation response from the Ollama API."""
+        messages = [
+            {"role": msg.role, "content": msg.text}
+            for msg in conversation.messages
+        ]
+
+        response = self.client.chat.completions.create(
+            messages=messages,
+            model=conversation.llm_model or self.DEFAULT_MODEL,
+            stream=True,
+            **{**self.DEFAULT_KWARGS, **kwargs},
+        )
+
+        for chunk in response:
+            if chunk.choices[0].delta.content is not None:
+                yield chunk.choices[0].delta.content
 
     @logger
     def structured_response(

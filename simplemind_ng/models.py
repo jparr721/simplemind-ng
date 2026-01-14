@@ -170,34 +170,96 @@ class Conversation(SMBaseModel):
     ) -> Message:
         """Send the conversation to the LLM."""
 
-        # TODO: llm_model and llm_provider should override the conversation's.
+        original_llm_model = self.llm_model
+        original_llm_provider = self.llm_provider
+        if llm_model is not None:
+            self.llm_model = llm_model
+        if llm_provider is not None:
+            self.llm_provider = llm_provider
 
-        # Execute all pre send hooks.
-        for plugin in self.plugins:
-            if hasattr(plugin, "pre_send_hook"):
-                try:
-                    plugin.pre_send_hook(self)
-                except NotImplementedError:
-                    pass
+        try:
+            # Execute all pre send hooks.
+            for plugin in self.plugins:
+                if hasattr(plugin, "pre_send_hook"):
+                    try:
+                        plugin.pre_send_hook(self)
+                    except NotImplementedError:
+                        pass
 
-        # Find the provider and send the conversation.
-        provider = find_provider(llm_provider or self.llm_provider)
-        response = provider.send_conversation(self, tools=tools)
+            # Find the provider and send the conversation.
+            provider = find_provider(self.llm_provider)
+            response = provider.send_conversation(self, tools=tools)
 
-        # Execute all post-send hooks.
-        for plugin in self.plugins:
-            if hasattr(plugin, "post_send_hook"):
-                try:
-                    plugin.post_send_hook(self, response)
-                except NotImplementedError:
-                    pass
+            # Execute all post-send hooks.
+            for plugin in self.plugins:
+                if hasattr(plugin, "post_send_hook"):
+                    try:
+                        plugin.post_send_hook(self, response)
+                    except NotImplementedError:
+                        pass
 
-        # Add the response to the conversation.
-        self.add_message(
-            role="assistant", text=response.text, meta=response.meta
-        )
+            # Add the response to the conversation.
+            self.add_message(
+                role="assistant", text=response.text, meta=response.meta
+            )
+        finally:
+            self.llm_model = original_llm_model
+            self.llm_provider = original_llm_provider
 
         return response
+
+    def send_stream(
+        self,
+        llm_model: str | None = None,
+        llm_provider: str | None = None,
+        tools: list[Callable | BaseTool] | None = None,
+    ):
+        """Send the conversation to the LLM with streaming outputs."""
+
+        original_llm_model = self.llm_model
+        original_llm_provider = self.llm_provider
+        if llm_model is not None:
+            self.llm_model = llm_model
+        if llm_provider is not None:
+            self.llm_provider = llm_provider
+
+        try:
+            # Execute all pre send hooks.
+            for plugin in self.plugins:
+                if hasattr(plugin, "pre_send_hook"):
+                    try:
+                        plugin.pre_send_hook(self)
+                    except NotImplementedError:
+                        pass
+
+            provider = find_provider(self.llm_provider)
+
+            if not provider.supports_streaming:
+                raise ValueError(f"{provider} does not support streaming")
+
+            chunks = []
+            stream = provider.send_conversation_stream(self, tools=tools)
+
+            for chunk in stream:
+                chunks.append(chunk)
+                yield chunk
+
+            full_text = "".join(chunks)
+            msg = Message(role="assistant", text=full_text)
+
+            # Execute all post-send hooks.
+            for plugin in self.plugins:
+                if hasattr(plugin, "post_send_hook"):
+                    try:
+                        plugin.post_send_hook(self, msg)
+                    except NotImplementedError:
+                        pass
+
+            # Add the response to the conversation.
+            self.add_message(role="assistant", text=full_text)
+        finally:
+            self.llm_model = original_llm_model
+            self.llm_provider = original_llm_provider
 
     def get_last_message(self, role: MESSAGE_ROLE) -> Message | None:
         """Get the last message with the given role."""

@@ -43,6 +43,15 @@ class BaseProvider(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def send_conversation_stream(
+        self,
+        conversation: "Conversation",
+        tools: list[Callable | BaseTool] | None = None,
+    ) -> "Message":
+        """Send a conversation to the provider with streaming output."""
+        raise NotImplementedError
+
+    @abstractmethod
     def structured_response(
         self, prompt: str, response_model: Type[T], **kwargs
     ) -> T:
