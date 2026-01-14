@@ -176,6 +176,27 @@ class Groq(BaseProvider):
         )
 
     @logger
+    def send_conversation_stream(
+        self, conversation: "Conversation", **kwargs
+    ) -> Iterator[str]:
+        """Stream a conversation response from the Groq API."""
+        messages = [
+            {"role": msg.role, "content": msg.text}
+            for msg in conversation.messages
+        ]
+
+        response = self.client.chat.completions.create(
+            messages=messages,
+            model=conversation.llm_model or self.DEFAULT_MODEL,
+            stream=True,
+            **{**self.DEFAULT_KWARGS, **kwargs},
+        )
+
+        for chunk in response:
+            if chunk.choices and chunk.choices[0].delta.content:
+                yield chunk.choices[0].delta.content
+
+    @logger
     def structured_response(
         self, prompt: str, response_model: Type[T], **kwargs
     ) -> T:
