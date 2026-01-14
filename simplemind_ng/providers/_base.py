@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, Callable, Type, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, Iterator, Type, TypeVar
 
 from instructor import Instructor
 from pydantic import BaseModel
@@ -47,7 +47,7 @@ class BaseProvider(ABC):
         self,
         conversation: "Conversation",
         tools: list[Callable | BaseTool] | None = None,
-    ) -> "Message":
+    ) -> Iterator[str]:
         """Send a conversation to the provider with streaming output."""
         raise NotImplementedError
 
