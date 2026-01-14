@@ -1,6 +1,22 @@
 Release History
 ===============
 
+## 0.5.0 (2026-01-14)
+
+### Breaking Changes
+- **Environment variable renamed**: `GEMINI_API_KEY` → `GOOGLE_API_KEY`
+- **Gemini dependency changed**: `google-generativeai` → `google-genai`
+- **Gemini default model changed**: `models/gemini-1.5-flash-latest` → `gemini-2.0-flash`
+
+### New Features
+- Add tool/function calling support for Gemini provider.
+- Add conversation streaming (`send_stream()`) support for Gemini provider.
+- Add streaming support to Anthropic, Groq, and xAI providers.
+
+### Improvements
+- Rewrite Gemini provider to use the new `google-genai` SDK with centralized client architecture.
+- Fix `BaseProvider.send_conversation_stream` return type annotation (`Message` → `Iterator[str]`).
+
 ## 0.3.3 (2024-02-08)
 
 - Improve openai provider by removing debug print statements.
