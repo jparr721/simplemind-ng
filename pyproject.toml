@@ -1,20 +1,13 @@
 [project]
 name = "simplemind-ng"
-version = "0.4.2"
+version = "0.5.1"
 description = "A maintained next-generation fork of simplemind with ongoing development and modern LLM features."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = ["pydantic", "pydantic-settings", "instructor", "logfire"]
 
 [project.optional-dependencies]
-full = [
-    "openai",
-    "anthropic",
-    "groq",
-    "google-genai",
-    "botocore",
-    "boto3",
-]
+full = ["openai", "anthropic", "groq", "google-genai", "botocore", "boto3"]
 amazon = ["boto3", "botocore", "anthropic"]
 anthropic = ["anthropic"]
 gemini = ["google-genai"]

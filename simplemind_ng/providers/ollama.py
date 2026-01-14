@@ -1,5 +1,5 @@
 from functools import cached_property
-from typing import TYPE_CHECKING, Iterator, Type, TypeVar
+from typing import TYPE_CHECKING, Callable, Iterator, Type, TypeVar
 
 import instructor
 from pydantic import BaseModel
@@ -7,6 +7,8 @@ from pydantic import BaseModel
 from ..logging import logger
 from ..settings import settings
 from ._base import BaseProvider
+from ._base_tools import BaseTool
+from .openai import OpenAITool
 
 if TYPE_CHECKING:
     from ..models import Conversation, Message
@@ -45,9 +47,17 @@ class Ollama(BaseProvider):
             mode=instructor.Mode.JSON,
         )
 
+    @cached_property
+    def tool(self) -> Type[BaseTool]:
+        """The tool implementation for Ollama (uses OpenAI-compatible format)."""
+        return OpenAITool
+
     @logger
     def send_conversation(
-        self, conversation: "Conversation", **kwargs
+        self,
+        conversation: "Conversation",
+        tools: list[Callable | BaseTool] | None = None,
+        **kwargs,
     ) -> "Message":
         """Send a conversation to the Ollama API."""
         from ..models import Message
@@ -57,6 +67,12 @@ class Ollama(BaseProvider):
             for msg in conversation.messages
         ]
 
+        # Set up tools if provided
+        converted_tools = self.make_tools(tools)
+        tools_config = (
+            [t.get_input_schema() for t in converted_tools] if tools else None
+        )
+
         request_kwargs = {
             **self.DEFAULT_KWARGS,
             **kwargs,
@@ -64,7 +80,20 @@ class Ollama(BaseProvider):
             "messages": messages,
         }
 
+        if tools_config:
+            request_kwargs["tools"] = tools_config
+
+        # Make initial API call
         response = self.client.chat.completions.create(**request_kwargs)
+
+        # Handle tool responses if needed
+        while response.choices[0].message.tool_calls:
+            for tool in converted_tools:
+                tool.handle(response, messages)
+                if tool.is_executed():
+                    response = self.client.chat.completions.create(**request_kwargs)
+                    tool.reset_result()
+
         assistant_message = response.choices[0].message
 
         # Create and return a properly formatted Message instance
@@ -77,19 +106,36 @@ class Ollama(BaseProvider):
         )
 
     @logger
-    def send_conversation_stream(self, conversation: "Conversation", **kwargs):
+    def send_conversation_stream(
+        self,
+        conversation: "Conversation",
+        tools: list[Callable | BaseTool] | None = None,
+        **kwargs,
+    ):
         """Stream a conversation response from the Ollama API."""
         messages = [
             {"role": msg.role, "content": msg.text}
             for msg in conversation.messages
         ]
 
-        response = self.client.chat.completions.create(
-            messages=messages,
-            model=conversation.llm_model or self.DEFAULT_MODEL,
-            stream=True,
-            **{**self.DEFAULT_KWARGS, **kwargs},
+        # Set up tools if provided
+        converted_tools = self.make_tools(tools)
+        tools_config = (
+            [t.get_input_schema() for t in converted_tools] if tools else None
         )
+
+        request_kwargs = {
+            **self.DEFAULT_KWARGS,
+            **kwargs,
+            "model": conversation.llm_model or self.DEFAULT_MODEL,
+            "messages": messages,
+            "stream": True,
+        }
+
+        if tools_config:
+            request_kwargs["tools"] = tools_config
+
+        response = self.client.chat.completions.create(**request_kwargs)
 
         for chunk in response:
             if chunk.choices[0].delta.content is not None:
