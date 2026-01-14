@@ -12,7 +12,7 @@ from typing import List
 import nltk
 import spacy
 import xerox
-from _context import simplemind as sm
+from _context import simplemind_ng as sm
 from docopt import docopt
 from nltk.tag import pos_tag
 from nltk.tokenize import word_tokenize

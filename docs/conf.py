@@ -11,7 +11,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
-import simplemind
+import simplemind_ng
 
 project = "simplemind"
 copyright = "2024 Kenneth Reitz"

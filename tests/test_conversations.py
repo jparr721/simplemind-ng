@@ -2,9 +2,9 @@ import json
 
 import pytest
 
-import simplemind as sm
-from simplemind.models import BasePlugin, Conversation
-from simplemind.providers import Anthropic, Gemini, Groq, Ollama, OpenAI
+import simplemind_ng as sm
+from simplemind_ng.models import BasePlugin, Conversation
+from simplemind_ng.providers import Anthropic, Gemini, Groq, Ollama, OpenAI
 
 
 @pytest.mark.parametrize(

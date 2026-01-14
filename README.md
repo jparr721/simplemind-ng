@@ -1,16 +1,19 @@
-# Simplemind: AI for Humans™
+# Simplemind-ng: AI for Humans™
+
+## Why A Fork?
+Kenneth Reitz appears to have stopped maintaining the original [simplemind](https://github.com/kennethreitz/simplemind) libray, and it has already began to suffer from bitrot due to the blistering pace of LLM development. My goal is to develop a fork which maintains the original spirit and adds features and bug fixes.
 
 **Keep it simple, keep it human.**
 
-Simplemind is AI library designed to simplify your experience with AI APIs in Python. Inspired by a "for humans" philosophy, it abstracts away complexity, giving developers an intuitive and human-friendly way to interact with powerful AI capabilities.
+Simplemind-ng is AI library designed to simplify your experience with AI APIs in Python. Inspired by a "for humans" philosophy, it abstracts away complexity, giving developers an intuitive and human-friendly way to interact with powerful AI capabilities.
 
-![simplemind](https://github.com/user-attachments/assets/36df2103-2583-4958-ad5e-19cda7740256)
+![Simplemind-ng](https://github.com/user-attachments/assets/36df2103-2583-4958-ad5e-19cda7740256)
 
 ## Features
 
-With Simplemind, tapping into AI is as easy as a friendly conversation.
+With Simplemind-ng, tapping into AI is as easy as a friendly conversation.
 
-- **Easy-to-use AI tools**: Simplemind provides simple interfaces to most popular AI services.
+- **Easy-to-use AI tools**: Simplemind-ng provides simple interfaces to most popular AI services.
 - **Human-centered design**: The library prioritizes readability and usability—no need to be an expert to start experimenting.
 - **Minimal configuration**: Get started quickly, without worrying about configuration headaches.
 
@@ -72,14 +75,14 @@ The APIs remain identical between all supported providers / models:
 
 To specify a specific provider or model, you can use the `llm_provider` and `llm_model` parameters when calling: `generate_text`, `generate_data`, or `create_conversation`.
 
-If you want to see Simplemind support additional providers or models, please send a pull request!
+If you want to see Simplemind-ng support additional providers or models, please send a pull request!
 
 ## Quickstart
 
-Simplemind takes care of the complex API calls so you can focus on what matters—building, experimenting, and creating.
+Simplemind-ng takes care of the complex API calls so you can focus on what matters—building, experimenting, and creating.
 
 ```bash
-$ pip install 'simplemind[full]'
+$ pip install 'Simplemind-ng[full]'
 ```
 
 First, authenticate your API keys by setting them in the environment variables:
@@ -90,15 +93,15 @@ $ export OPENAI_API_KEY="sk-..."
 
 This pattern allows you to keep your API keys private and out of your codebase. Other supported environment variables: `ANTHROPIC_API_KEY`, `XAI_API_KEY`, `DEEPSEEK_API_KEY`, `GROQ_API_KEY`, and `GEMINI_API_KEY`.
 
-Next, import Simplemind and start using it:
+Next, import simplemind-ng and start using it:
 
 ```python
-import simplemind as sm
+import simplemind-ng as sm
 ```
 
 ## Examples
 
-Here are some examples of how to use Simplemind.
+Here are some examples of how to use Simplemind-ng.
 
 **Please note**: Most of the calls seen here optionally accept `llm_provider` and `llm_model` parameters, which you provide as strings.
 
@@ -160,7 +163,7 @@ Special thanks to [@jxnl](https://github.com/jxnl) for building [Instructor](htt
 
 ### Conversational AI
 
-SimpleMind also allows for easy conversational flows:
+Simplemind-ng also allows for easy conversational flows:
 
 ```pycon
 >>> conv = sm.create_conversation()
@@ -312,10 +315,10 @@ Functions can be defined with type hints and Pydantic models for validation. The
 
 #### 🪄 Using LLM for automatic tool definition (Experimental)
 
-Simplemind provides a decorator to automatically transform Python functions into tools with AI-generated metadata. Simply use the `@simplemind.tool` decorator to have the LLM analyze your function and generate appropriate descriptions and schema:
+Simplemind-ng provides a decorator to automatically transform Python functions into tools with AI-generated metadata. Simply use the `@Simplemind-ng.tool` decorator to have the LLM analyze your function and generate appropriate descriptions and schema:
 
 ```python
-@simplemind.tool(llm_provider="anthropic")
+@Simplemind-ng.tool(llm_provider="anthropic")
 def haversine(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     r = 6371
     phi1 = math.radians(lat1)
@@ -375,7 +378,7 @@ See [examples/distance_calculator.py](examples/distance_calculator.py) for more.
 
 ### Logging
 
-Simplemind uses [Logfire](https://pydantic.dev/logfire) for logging. To enable logging, call `sm.enable_logfire()`.
+Simplemind-ng uses [Logfire](https://pydantic.dev/logfire) for logging. To enable logging, call `sm.enable_logfire()`.
 
 ### More Examples
 
@@ -385,7 +388,7 @@ Please see the [examples](examples) directory for executable examples.
 
 ## Contributing
 
-We welcome contributions of all kinds. Feel free to open issues for bug reports or feature requests, and submit pull requests to make SimpleMind even better.
+We welcome contributions of all kinds. Feel free to open issues for bug reports or feature requests, and submit pull requests to make Simplemind-ng even better.
 
 To get started:
 
@@ -396,8 +399,8 @@ To get started:
 
 ## License
 
-Simplemind is licensed under the Apache 2.0 License.
+Simplemind-ng is licensed under the Apache 2.0 License.
 
 ## Acknowledgements
 
-Simplemind is inspired by the philosophy of "code for humans" and aims to make working with AI models accessible to all. Special thanks to the open-source community for their contributions and inspiration.
+Simplemind-ng is inspired by the philosophy of "code for humans" and aims to make working with AI models accessible to all. Special thanks to the open-source community for their contributions and inspiration.

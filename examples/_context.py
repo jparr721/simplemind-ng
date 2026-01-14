@@ -5,7 +5,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 
-import simplemind
-import simplemind as sm
+import simplemind_ng
+import simplemind_ng as sm
 
-__all__ = ["simplemind", "sm"]
+__all__ = ["simplemind_ng", "sm"]

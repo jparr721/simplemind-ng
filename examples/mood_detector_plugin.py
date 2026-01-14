@@ -1,5 +1,5 @@
 import nltk
-from _context import simplemind as sm
+from _context import simplemind_ng as sm
 from nltk.sentiment import SentimentIntensityAnalyzer
 from rich.console import Console
 

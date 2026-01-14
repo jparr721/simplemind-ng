@@ -3,7 +3,7 @@ from typing import Literal
 
 from pydantic.main import BaseModel
 
-from simplemind import generate_text
+from simplemind_ng import generate_text
 
 MAX_WIDTH = 80
 

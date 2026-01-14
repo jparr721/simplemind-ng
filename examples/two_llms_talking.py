@@ -1,6 +1,6 @@
 import time
 
-import simplemind as sm
+import simplemind_ng as sm
 
 
 class ConversationPlugin(sm.BasePlugin):

@@ -1,4 +1,4 @@
-from _context import simplemind as sm
+from _context import simplemind_ng as sm
 from pydantic import BaseModel
 from rich.console import Console
 from rich.panel import Panel

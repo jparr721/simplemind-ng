@@ -6,7 +6,7 @@ import pytest
 # Add the project root to the Python path.
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from simplemind import Session
+from simplemind_ng import Session
 
 
 @pytest.fixture

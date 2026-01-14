@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Any, Callable, Type, TypeVar
 from instructor import Instructor
 from pydantic import BaseModel
 
-from simplemind.providers._base_tools import BaseTool
+from simplemind_ng.providers._base_tools import BaseTool
 
 if TYPE_CHECKING:
     from ..models import Conversation, Message

@@ -2,7 +2,7 @@ from typing import Annotated
 
 from pydantic import Field
 
-from _context import simplemind as sm
+from _context import simplemind_ng as sm
 
 
 def analyze_text(

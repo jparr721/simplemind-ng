@@ -1,4 +1,4 @@
-import simplemind as sm
+import simplemind_ng as sm
 
 
 class LoggingPlugin(sm.BasePlugin):

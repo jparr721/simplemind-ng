@@ -1,6 +1,6 @@
 import pytest
 
-from simplemind.providers import Amazon, Anthropic, Gemini, Groq, Ollama, OpenAI
+from simplemind_ng.providers import Amazon, Anthropic, Gemini, Groq, Ollama, OpenAI
 
 
 @pytest.mark.parametrize(

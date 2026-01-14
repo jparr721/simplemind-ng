@@ -3,10 +3,10 @@ from typing import Annotated, Literal
 import pytest
 from pydantic import Field
 
-import simplemind as sm
+import simplemind_ng as sm
 
-from simplemind.providers import Anthropic, OpenAI
-from simplemind.providers._base_tools import BaseTool
+from simplemind_ng.providers import Anthropic, OpenAI
+from simplemind_ng.providers._base_tools import BaseTool
 
 MODELS = [
     Anthropic,

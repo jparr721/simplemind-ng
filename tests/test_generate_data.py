@@ -1,7 +1,7 @@
 import pytest
 from pydantic import BaseModel
 
-from simplemind.providers import Amazon, Anthropic, Gemini, Groq, Ollama, OpenAI
+from simplemind_ng.providers import Amazon, Anthropic, Gemini, Groq, Ollama, OpenAI
 
 
 class ResponseModel(BaseModel):

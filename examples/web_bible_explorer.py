@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
-import simplemind as sm
+import simplemind_ng as sm
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")

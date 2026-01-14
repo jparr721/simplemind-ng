@@ -1,7 +1,7 @@
 [project]
-name = "simplemind"
-version = "0.3.3"
-description = "An experimental client for AI providers that intends to replace LangChain and LangGraph for most common use cases."
+name = "simplemind-ng"
+version = "0.4.0"
+description = "A maintained next-generation fork of simplemind with ongoing development and modern LLM features."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = ["pydantic", "pydantic-settings", "instructor", "logfire"]
@@ -13,7 +13,7 @@ full = [
     "groq",
     "google-generativeai",
     "botocore",
-    "boto3"
+    "boto3",
 ]
 amazon = ["boto3", "botocore", "anthropic"]
 anthropic = ["anthropic"]
@@ -24,6 +24,10 @@ openai = ["openai"]
 xai = ["openai"]
 deepseek = ["openai"]
 
+[project.urls]
+Homepage = "https://github.com/jparr721/simplemind-ng"
+Source = "https://github.com/jparr721/simplemind-ng"
+Issues = "https://github.com/jparr721/simplemind-ng/issues"
 
 [build-system]
 requires = ["hatchling"]
