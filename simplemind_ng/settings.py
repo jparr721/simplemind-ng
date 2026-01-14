@@ -50,8 +50,8 @@ class Settings(BaseSettings):
     GROQ_API_KEY: Optional[SecretStr] = Field(
         None, description="API key for Groq"
     )
-    GEMINI_API_KEY: Optional[SecretStr] = Field(
-        None, description="API key for Gemini"
+    GOOGLE_API_KEY: Optional[SecretStr] = Field(
+        None, description="API key for Google/Gemini"
     )
     OPENAI_API_KEY: Optional[SecretStr] = Field(
         None, description="API key for OpenAI"
@@ -88,7 +88,12 @@ class Settings(BaseSettings):
         Safely get API key for a specific provider.
         Returns the key as a string or None if not set.
         """
-        key = getattr(self, f"{provider.upper()}_API_KEY", None)
+        # Map provider names to their API key names
+        provider_key_mapping = {
+            "gemini": "google",
+        }
+        key_name = provider_key_mapping.get(provider.lower(), provider)
+        key = getattr(self, f"{key_name.upper()}_API_KEY", None)
         return key.get_secret_value() if key else None
 
 
