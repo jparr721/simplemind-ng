@@ -84,7 +84,7 @@ class Gemini(BaseProvider):
     def client(self):
         """The raw Gemini client."""
         if not self.api_key:
-            raise ValueError("Google API key is required")
+            raise ValueError("Gemini API key is required")
         try:
             from google import genai
         except ImportError as exc:
