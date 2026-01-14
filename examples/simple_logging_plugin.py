@@ -3,13 +3,17 @@ import simplemind_ng as sm
 
 class LoggingPlugin(sm.BasePlugin):
     def pre_send_hook(self, conversation):
-        print(f"Sending conversation with {len(conversation.messages)} messages")
+        print(
+            f"Sending conversation with {len(conversation.messages)} messages"
+        )
 
     def add_message_hook(self, conversation, message):
         print(f"Adding message to conversation: {message.text}")
 
     def cleanup_hook(self, conversation):
-        print(f"Cleaning up conversation with {len(conversation.messages)} messages")
+        print(
+            f"Cleaning up conversation with {len(conversation.messages)} messages"
+        )
 
     def initialize_hook(self, conversation):
         print("Initializing conversation")

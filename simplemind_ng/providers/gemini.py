@@ -57,14 +57,18 @@ class Gemini(BaseProvider):
         chat = self.client.start_chat()
 
         # Send all previous messages to establish context
-        for msg in conversation.messages[:-1]:  # All messages except the last one
+        for msg in conversation.messages[
+            :-1
+        ]:  # All messages except the last one
             chat.send_message(msg.text)
 
         # Send the final message and get response
         try:
             response = chat.send_message(conversation.messages[-1].text)
         except Exception as e:
-            raise RuntimeError(f"Failed to send conversation to Gemini API: {e}") from e
+            raise RuntimeError(
+                f"Failed to send conversation to Gemini API: {e}"
+            ) from e
 
         # Create and return a properly formatted Message instance
         return Message(
@@ -76,7 +80,9 @@ class Gemini(BaseProvider):
         )
 
     @logger
-    def structured_response(self, prompt: str, response_model: Type[T], **kwargs) -> T:
+    def structured_response(
+        self, prompt: str, response_model: Type[T], **kwargs
+    ) -> T:
         """Send a structured response to the Gemini API."""
         # Only try to pop if the key exists
         kwargs.pop("llm_model", None)  # Add default value of None
@@ -102,7 +108,9 @@ class Gemini(BaseProvider):
             response = self.client.generate_content(prompt, **kwargs)
         except Exception as e:
             # Handle the exception appropriately, e.g., log the error or raise a custom exception
-            raise RuntimeError(f"Failed to generate text with Gemini API: {e}") from e
+            raise RuntimeError(
+                f"Failed to generate text with Gemini API: {e}"
+            ) from e
         return response.text
 
     @logger
@@ -110,7 +118,9 @@ class Gemini(BaseProvider):
         """Generate streaming text using the Gemini API."""
         kwargs.pop("llm_model", None)
         try:
-            response = self.client.generate_content(prompt, stream=True, **kwargs)
+            response = self.client.generate_content(
+                prompt, stream=True, **kwargs
+            )
             for chunk in response:
                 if chunk.text:
                     yield chunk.text

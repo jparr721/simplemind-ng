@@ -18,9 +18,9 @@ T = TypeVar("T", bound=BaseModel)
 class OpenAITool(BaseTool):
     def get_response_schema(self):
         assert self.is_executed, f"Tool {self.name} was not executed."
-        assert isinstance(
-            self.tool_id, str
-        ), f"Expected str for `tool_id` got {self.tool_id!r}"
+        assert isinstance(self.tool_id, str), (
+            f"Expected str for `tool_id` got {self.tool_id!r}"
+        )
 
         return {
             "role": "tool",
@@ -38,7 +38,9 @@ class OpenAITool(BaseTool):
 
         # Check if there's a tool call
         if assistant_message.tool_calls:
-            tool_call = assistant_message.tool_calls[0]  # Get the first tool call
+            tool_call = assistant_message.tool_calls[
+                0
+            ]  # Get the first tool call
             if tool_call.function.name == self.name:
                 # Execute the function
                 import json
@@ -126,7 +128,8 @@ class OpenAI(BaseProvider):
 
         # Format messages from conversation
         formatted_messages = [
-            {"role": msg.role, "content": msg.text} for msg in conversation.messages
+            {"role": msg.role, "content": msg.text}
+            for msg in conversation.messages
         ]
 
         # Set up tools if provided
@@ -156,7 +159,9 @@ class OpenAI(BaseProvider):
                 tool.handle(response, formatted_messages)
                 if tool.is_executed():
                     # Make another API call with the updated messages
-                    response = self.client.chat.completions.create(**request_kwargs)
+                    response = self.client.chat.completions.create(
+                        **request_kwargs
+                    )
                     tool.reset_result()
 
         final_message = response.choices[0].message.content

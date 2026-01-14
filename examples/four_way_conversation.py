@@ -14,7 +14,9 @@ def four_way_conversation(topic: str, rounds: int = 3):
     # Create conversations for four different AIs
     with (
         sm.create_conversation(llm_provider="anthropic") as claude_conv,
-        sm.create_conversation(llm_model="gpt-4", llm_provider="openai") as gpt4_conv,
+        sm.create_conversation(
+            llm_model="gpt-4", llm_provider="openai"
+        ) as gpt4_conv,
         sm.create_conversation(
             llm_model="llama3.2", llm_provider="ollama"
         ) as llama_conv,

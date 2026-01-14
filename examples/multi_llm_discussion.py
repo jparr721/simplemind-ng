@@ -81,9 +81,9 @@ class Discussion:
             custom_prompt=custom_prompt,
         )
         # make sure the nickname is unique
-        assert member.nickname not in [
-            m.nickname for m in self.members
-        ], f"Duplicate nickname: {member.nickname}"
+        assert member.nickname not in [m.nickname for m in self.members], (
+            f"Duplicate nickname: {member.nickname}"
+        )
         self.members.append(member)
         if self.verbose:
             print(f"Added {member.nickname} to the discussion.")
@@ -116,7 +116,10 @@ class Discussion:
         for message in self.conversation:
             if isinstance(message, BotMessage):
                 relevant_messages.append(message)
-            elif isinstance(message, ModeratorMessage) and member in message.visible_to:
+            elif (
+                isinstance(message, ModeratorMessage)
+                and member in message.visible_to
+            ):
                 relevant_messages.append(message)
         return "\n\n".join(map(str, relevant_messages))
 
@@ -183,11 +186,15 @@ class Discussion:
 
         for member in self.members:
             if member.custom_prompt is not None:
-                self.add_moderator_message(member.custom_prompt, visible_to=[member])
+                self.add_moderator_message(
+                    member.custom_prompt, visible_to=[member]
+                )
 
         if self.verbose:
             print(f"Topic: {self.topic}")
-            print(f"Members: {', '.join(member.nickname for member in self.members)}")
+            print(
+                f"Members: {', '.join(member.nickname for member in self.members)}"
+            )
 
     def discuss(self, no_of_rounds: int = 1):
         """
@@ -252,7 +259,9 @@ class Discussion:
 
 if __name__ == "__main__":
     discussion = Discussion(verbose=True)
-    discussion.set_topic("The future of human-AI collaboration in creative fields")
+    discussion.set_topic(
+        "The future of human-AI collaboration in creative fields"
+    )
     discussion.add_member(
         provider_name="openai",
         provider_model="gpt-4o-mini",

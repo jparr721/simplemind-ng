@@ -7,7 +7,9 @@ class MathPlugin(sm.BasePlugin):
         if last_user_message is None:
             return
         if "calculate" in last_user_message.text.lower():
-            expression = last_user_message.text.lower().replace("calculate", "").strip()
+            expression = (
+                last_user_message.text.lower().replace("calculate", "").strip()
+            )
             try:
                 result = eval(expression)
                 conversation.add_message(
@@ -20,7 +22,9 @@ class MathPlugin(sm.BasePlugin):
                 )
 
 
-conversation = sm.create_conversation(llm_model="gpt-4o", llm_provider="openai")
+conversation = sm.create_conversation(
+    llm_model="gpt-4o", llm_provider="openai"
+)
 conversation.add_plugin(MathPlugin())
 
 conversation.add_message("user", "Calculate 2 + 2 * 3")

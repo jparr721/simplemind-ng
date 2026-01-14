@@ -24,7 +24,9 @@ def get_weather(
     ],
     unit: Annotated[
         Literal["celcius", "fahrenheit"],
-        Field(description="The unit of temperature, either 'celsius' or 'fahrenheit'"),
+        Field(
+            description="The unit of temperature, either 'celsius' or 'fahrenheit'"
+        ),
     ] = "celcius",
 ):
     """

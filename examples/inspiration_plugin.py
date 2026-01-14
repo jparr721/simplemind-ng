@@ -26,7 +26,9 @@ class InspirationPlugin(sm.BasePlugin):
 
 
 # Create a conversation and add the plugin
-conversation = sm.create_conversation(llm_model="gpt-4o-mini", llm_provider="openai")
+conversation = sm.create_conversation(
+    llm_model="gpt-4o-mini", llm_provider="openai"
+)
 conversation.add_plugin(InspirationPlugin())
 
 # Add a user message and send the conversation

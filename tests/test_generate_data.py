@@ -1,7 +1,14 @@
 import pytest
 from pydantic import BaseModel
 
-from simplemind_ng.providers import Amazon, Anthropic, Gemini, Groq, Ollama, OpenAI
+from simplemind_ng.providers import (
+    Amazon,
+    Anthropic,
+    Gemini,
+    Groq,
+    Ollama,
+    OpenAI,
+)
 
 
 class ResponseModel(BaseModel):
@@ -23,7 +30,9 @@ def test_generate_data(provider_cls):
     provider = provider_cls()
     prompt = "What is 2+2?"
 
-    data = provider.structured_response(prompt=prompt, response_model=ResponseModel)
+    data = provider.structured_response(
+        prompt=prompt, response_model=ResponseModel
+    )
 
     assert isinstance(data, ResponseModel)
     assert isinstance(data.result, int)

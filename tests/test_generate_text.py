@@ -1,6 +1,13 @@
 import pytest
 
-from simplemind_ng.providers import Amazon, Anthropic, Gemini, Groq, Ollama, OpenAI
+from simplemind_ng.providers import (
+    Amazon,
+    Anthropic,
+    Gemini,
+    Groq,
+    Ollama,
+    OpenAI,
+)
 
 
 @pytest.mark.parametrize(
@@ -18,7 +25,9 @@ def test_generate_text(provider_cls):
     provider = provider_cls()
     prompt = "What is 2+2?"
 
-    response = provider.generate_text(prompt=prompt, llm_model=provider.DEFAULT_MODEL)
+    response = provider.generate_text(
+        prompt=prompt, llm_model=provider.DEFAULT_MODEL
+    )
 
     assert isinstance(response, str)
     assert len(response) > 0

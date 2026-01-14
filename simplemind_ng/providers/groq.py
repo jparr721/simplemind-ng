@@ -18,9 +18,9 @@ T = TypeVar("T", bound=BaseModel)
 class GroqTool(BaseTool):
     def get_response_schema(self):
         assert self.is_executed, f"Tool {self.name} was not executed."
-        assert isinstance(
-            self.tool_id, str
-        ), f"Expected str for `tool_id` got {self.tool_id!r}"
+        assert isinstance(self.tool_id, str), (
+            f"Expected str for `tool_id` got {self.tool_id!r}"
+        )
 
         return {
             "role": "tool",
@@ -86,6 +86,7 @@ class GroqTool(BaseTool):
                 },
             },
         }
+
 
 class Groq(BaseProvider):
     NAME = "groq"
@@ -175,7 +176,9 @@ class Groq(BaseProvider):
         )
 
     @logger
-    def structured_response(self, prompt: str, response_model: Type[T], **kwargs) -> T:
+    def structured_response(
+        self, prompt: str, response_model: Type[T], **kwargs
+    ) -> T:
         # Ensure messages are provided in kwargs
         messages = [
             {"role": "user", "content": prompt},

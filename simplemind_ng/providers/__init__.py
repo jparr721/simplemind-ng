@@ -33,5 +33,5 @@ __all__ = [
     "providers",
     "BaseProvider",
     "BaseTool",
-    "Deepseek"
+    "Deepseek",
 ]

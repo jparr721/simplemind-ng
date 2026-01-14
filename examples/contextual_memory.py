@@ -31,7 +31,9 @@ class ContextualMemoryPlugin(sm.BasePlugin):
         else:
             self.memories = []
             self.embeddings = []
-            self.index = faiss.IndexFlatL2(1536)  # Dimension for ada-002 embeddings
+            self.index = faiss.IndexFlatL2(
+                1536
+            )  # Dimension for ada-002 embeddings
 
     def save_memories(self):
         with open(self.memory_file, "wb") as f:
@@ -45,7 +47,9 @@ class ContextualMemoryPlugin(sm.BasePlugin):
             self.index = faiss.IndexFlatL2(1536)
 
     def get_embedding(self, text: str) -> list:
-        response = openai.Embedding.create(input=text, model=self.embedding_model)
+        response = openai.Embedding.create(
+            input=text, model=self.embedding_model
+        )
         return response["data"][0]["embedding"]
 
     def add_memory(self, memory: str):
@@ -59,7 +63,9 @@ class ContextualMemoryPlugin(sm.BasePlugin):
         if not self.index or len(self.embeddings) == 0:
             return []
         query_embedding = self.get_embedding(query)
-        D, I = self.index.search(np.array([query_embedding]).astype("float32"), top_k)
+        D, I = self.index.search(
+            np.array([query_embedding]).astype("float32"), top_k
+        )
         return [self.memories[i] for i in I[0] if i < len(self.memories)]
 
     def pre_send_hook(self, conversation: sm.Conversation):
@@ -87,7 +93,9 @@ class Story(BaseModel):
 # Initialize the conversation with the ContextualMemoryPlugin
 memory_plugin = ContextualMemoryPlugin(api_key=sm.settings.OPENAI_API_KEY)
 
-conversation = sm.create_conversation(llm_model="gpt-4o-mini", llm_provider="openai")
+conversation = sm.create_conversation(
+    llm_model="gpt-4o-mini", llm_provider="openai"
+)
 conversation.add_plugin(memory_plugin)
 
 # Add user message

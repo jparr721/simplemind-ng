@@ -51,7 +51,9 @@ class Session:
         """Create a conversation using the session's default provider and model."""
         merged_kwargs = {**self.default_kwargs, **kwargs}
         return create_conversation(
-            llm_provider=self.llm_provider, llm_model=self.llm_model, **merged_kwargs
+            llm_provider=self.llm_provider,
+            llm_model=self.llm_model,
+            **merged_kwargs,
         )
 
 
@@ -121,12 +123,15 @@ def generate_text(
             prompt=prompt, llm_model=llm_model, **kwargs
         )
     else:
-        return provider.generate_text(prompt=prompt, llm_model=llm_model, **kwargs)
+        return provider.generate_text(
+            prompt=prompt, llm_model=llm_model, **kwargs
+        )
 
 
 def enable_logfire() -> None:
     """Enable logfire logging."""
     settings.logging.enable_logfire()
+
 
 def tool(
     llm_provider: str | None = None,
@@ -153,6 +158,7 @@ def tool(
 
     return decorator
 
+
 # Syntax sugar.
 Plugin = BasePlugin
 
@@ -166,5 +172,5 @@ __all__ = [
     "Session",
     "Plugin",
     "enable_logfire",
-    "tool"
+    "tool",
 ]

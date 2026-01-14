@@ -131,7 +131,9 @@ class ContextDatabase:
                 entities = []
                 for row in cur.fetchall():
                     entity, total_count, source_counts = row
-                    source_dict = dict(sc.split(":") for sc in source_counts.split(","))
+                    source_dict = dict(
+                        sc.split(":") for sc in source_counts.split(",")
+                    )
                     entities.append(
                         (
                             entity,
@@ -197,7 +199,9 @@ class ContextDatabase:
         except sqlite3.Error as e:
             self.logger.error(f"Database error storing essence marker: {e}")
 
-    def retrieve_essence_markers(self, days: int = 30) -> List[tuple[str, str]]:
+    def retrieve_essence_markers(
+        self, days: int = 30
+    ) -> List[tuple[str, str]]:
         """Retrieve recent essence markers"""
         try:
             with self.get_connection() as conn:
@@ -213,7 +217,9 @@ class ContextDatabase:
                 )
                 return cur.fetchall()
         except sqlite3.Error as e:
-            self.logger.error(f"Database error retrieving essence markers: {e}")
+            self.logger.error(
+                f"Database error retrieving essence markers: {e}"
+            )
             return []
 
 
@@ -226,7 +232,8 @@ class EnhancedContextPlugin(sm.BasePlugin):
         self.verbose = verbose
         if verbose:
             logging.basicConfig(
-                level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+                level=logging.INFO,
+                format="%(asctime)s - %(levelname)s - %(message)s",
             )
         else:
             logging.basicConfig(level=logging.WARNING)
@@ -243,7 +250,9 @@ class EnhancedContextPlugin(sm.BasePlugin):
 
         # Initialize database
         self.db = ContextDatabase(DB_PATH)
-        self.logger.info(f"EnhancedContextPlugin initialized with database: {DB_PATH}")
+        self.logger.info(
+            f"EnhancedContextPlugin initialized with database: {DB_PATH}"
+        )
 
         # Load identity from database
         self.personal_identity = self.db.load_identity()
@@ -308,7 +317,9 @@ class EnhancedContextPlugin(sm.BasePlugin):
 
         # Add identity context
         if include_identity and self.personal_identity:
-            context_parts.append(f"The user's name is {self.personal_identity}.")
+            context_parts.append(
+                f"The user's name is {self.personal_identity}."
+            )
 
         # Add essence markers
         essence_markers = self.retrieve_essence_markers()
@@ -319,7 +330,9 @@ class EnhancedContextPlugin(sm.BasePlugin):
 
             context_parts.append("User characteristics:")
             for marker_type, markers in markers_by_type.items():
-                context_parts.append(f"- {marker_type.title()}: {', '.join(markers)}")
+                context_parts.append(
+                    f"- {marker_type.title()}: {', '.join(markers)}"
+                )
 
         # Add entity context with user/llm breakdown
         if entities:
@@ -374,7 +387,9 @@ class EnhancedContextPlugin(sm.BasePlugin):
 
             for marker_type, pattern_list in patterns.items():
                 for pattern in pattern_list:
-                    for match in re.finditer(pattern, sent_text, re.IGNORECASE):
+                    for match in re.finditer(
+                        pattern, sent_text, re.IGNORECASE
+                    ):
                         marker_text = match.group(1).strip()
                         if self._is_valid_marker(marker_text):
                             markers.append((marker_type, marker_text))
@@ -384,7 +399,9 @@ class EnhancedContextPlugin(sm.BasePlugin):
     def _is_valid_marker(self, marker_text: str) -> bool:
         """Helper method to validate essence markers"""
         invalid_words = {"um", "uh", "like"}
-        return len(marker_text) > 3 and not any(w in marker_text for w in invalid_words)
+        return len(marker_text) > 3 and not any(
+            w in marker_text for w in invalid_words
+        )
 
     def pre_send_hook(self, conversation: sm.Conversation) -> bool:
         """Process user message before sending to LLM"""
@@ -396,7 +413,9 @@ class EnhancedContextPlugin(sm.BasePlugin):
             return True
 
         # Handle special commands
-        if result := self._handle_special_commands(conversation, last_message.text):
+        if result := self._handle_special_commands(
+            conversation, last_message.text
+        ):
             return result
 
         self.logger.info(f"Processing user message: {last_message.text}")
@@ -434,9 +453,13 @@ class EnhancedContextPlugin(sm.BasePlugin):
         essence_markers = self.extract_essence_markers(message)
         for marker_type, marker_text in essence_markers:
             self.store_essence_marker(marker_type, marker_text)
-            self.logger.info(f"Found essence marker: {marker_type} - {marker_text}")
+            self.logger.info(
+                f"Found essence marker: {marker_type} - {marker_text}"
+            )
 
-    def _add_context_to_conversation(self, conversation: sm.Conversation) -> None:
+    def _add_context_to_conversation(
+        self, conversation: sm.Conversation
+    ) -> None:
         """Add context message to conversation"""
         recent_entities = self.retrieve_recent_entities(days=30)
         context_message = self.format_context_message(recent_entities)
@@ -458,7 +481,9 @@ class EnhancedContextPlugin(sm.BasePlugin):
     def store_essence_marker(self, marker_type: str, marker_text: str) -> None:
         self.db.store_essence_marker(marker_type, marker_text)
 
-    def retrieve_essence_markers(self, days: int = 30) -> List[tuple[str, str]]:
+    def retrieve_essence_markers(
+        self, days: int = 30
+    ) -> List[tuple[str, str]]:
         return self.db.retrieve_essence_markers(days)
 
     def summarize_memory(self, days: int = 30) -> str:
@@ -493,7 +518,9 @@ class EnhancedContextPlugin(sm.BasePlugin):
 
         return "\n".join(summary_parts)
 
-    def simulate_llm_conversation(self, context: str, num_turns: int = 3) -> str:
+    def simulate_llm_conversation(
+        self, context: str, num_turns: int = 3
+    ) -> str:
         """Simulate a conversation between multiple LLM personalities about the context"""
         conversation_log = []
 
@@ -629,7 +656,9 @@ class EnhancedContextPlugin(sm.BasePlugin):
         # Extract key words and patterns
         words = set(tokens)
         has_question_word = any(word in ["who", "what"] for word in words)
-        has_identity_term = any(word in ["i", "me", "my", "name"] for word in words)
+        has_identity_term = any(
+            word in ["i", "me", "my", "name"] for word in words
+        )
         has_conversation_term = any(
             word in ["talking", "speaking", "chatting"] for word in words
         )
@@ -673,7 +702,9 @@ class EnhancedContextPlugin(sm.BasePlugin):
         # Add top mentions with details
         for entity, total, user_count, llm_count in sorted_entities:
             source_breakdown = f"(User: {user_count}, AI: {llm_count})"
-            output_parts.append(f"- **{entity}**: {total} mentions {source_breakdown}")
+            output_parts.append(
+                f"- **{entity}**: {total} mentions {source_breakdown}"
+            )
 
         # Add list of all topics
         all_topics = [entity[0] for entity in sorted_entities]
@@ -751,7 +782,9 @@ def main():
     model = args["--model"] if args["--model"] else None
 
     # Create a conversation and add the plugin
-    conversation = sm.create_conversation(llm_model=model, llm_provider=provider)
+    conversation = sm.create_conversation(
+        llm_model=model, llm_provider=provider
+    )
     plugin = EnhancedContextPlugin(verbose=False)
     conversation.add_plugin(plugin)
 
@@ -792,11 +825,17 @@ Type 'quit' to exit. Type '/' to see a list of commands.
 
                 # Handle copy command
                 if user_input.lower() == "/copy":
-                    last_response = conversation.get_last_message(role="assistant")
+                    last_response = conversation.get_last_message(
+                        role="assistant"
+                    )
                     if last_response:
-                        clean_text = last_response.text.replace("### Response\n", "")
+                        clean_text = last_response.text.replace(
+                            "### Response\n", ""
+                        )
                         xerox.copy(clean_text)
-                        console.print(Markdown("*Last response copied to clipboard*"))
+                        console.print(
+                            Markdown("*Last response copied to clipboard*")
+                        )
                     else:
                         console.print(Markdown("*No response to copy*"))
                     continue
@@ -819,7 +858,9 @@ Type 'quit' to exit. Type '/' to see a list of commands.
                             conversation.add_message(
                                 role="user", text=clipboard_content
                             )
-                            should_continue = plugin.pre_send_hook(conversation)
+                            should_continue = plugin.pre_send_hook(
+                                conversation
+                            )
 
                             if should_continue is not False:
                                 with Status(
@@ -837,7 +878,9 @@ Type 'quit' to exit. Type '/' to see a list of commands.
                         else:
                             console.print(Markdown("*Clipboard is empty*"))
                     except Exception as e:
-                        console.print(Markdown(f"*Error accessing clipboard: {e}*"))
+                        console.print(
+                            Markdown(f"*Error accessing clipboard: {e}*")
+                        )
                     continue
 
                 # Handle lumina command
@@ -855,9 +898,13 @@ Type 'quit' to exit. Type '/' to see a list of commands.
                     should_continue = plugin.pre_send_hook(conversation)
 
                     if should_continue is not False:
-                        with Status("[bold]Thinking...[/]", spinner="dots") as status:
+                        with Status(
+                            "[bold]Thinking...[/]", spinner="dots"
+                        ) as status:
                             response = conversation.send()
-                            formatted_response = f"""### Response\n{response.text}"""
+                            formatted_response = (
+                                f"""### Response\n{response.text}"""
+                            )
                             response.text = formatted_response
                             plugin.post_response_hook(conversation)
 
@@ -890,15 +937,21 @@ Type 'quit' to exit. Type '/' to see a list of commands.
                 response = conversation.get_last_message(role="assistant")
                 if response:
                     console.print()  # Add blank line before response
-                    console.print(Markdown(response.text))  # Response as markdown
+                    console.print(
+                        Markdown(response.text)
+                    )  # Response as markdown
 
             # Handle perspectives command
             if user_input.lower() == "/perspectives":
                 console.print(Markdown("\n## 🎉 Different Perspectives"))
                 recent_entities = plugin.retrieve_recent_entities()
                 context = plugin.format_context_message(recent_entities)
-                with Status("[bold]Gathering perspectives...[/]", spinner="dots"):
-                    conversation_result = plugin.simulate_llm_conversation(context)
+                with Status(
+                    "[bold]Gathering perspectives...[/]", spinner="dots"
+                ):
+                    conversation_result = plugin.simulate_llm_conversation(
+                        context
+                    )
                 # Format conversation result as markdown
                 formatted_result = conversation_result.replace(
                     "Speaker", "\n### Speaker"
@@ -921,7 +974,9 @@ Type 'quit' to exit. Type '/' to see a list of commands.
                             )
                         )
 
-                        conversation.add_message(role="user", text=clipboard_content)
+                        conversation.add_message(
+                            role="user", text=clipboard_content
+                        )
                         should_continue = plugin.pre_send_hook(conversation)
 
                         if should_continue is not False:
@@ -940,7 +995,9 @@ Type 'quit' to exit. Type '/' to see a list of commands.
                     else:
                         console.print(Markdown("*Clipboard is empty*"))
                 except Exception as e:
-                    console.print(Markdown(f"*Error accessing clipboard: {e}*"))
+                    console.print(
+                        Markdown(f"*Error accessing clipboard: {e}*")
+                    )
                 continue
 
     except KeyboardInterrupt:

@@ -43,17 +43,22 @@ class Amazon(BaseProvider):
 
         return instructor.from_anthropic(self.client)
 
-    def send_conversation(self, conversation: "Conversation", **kwargs) -> "Message":
+    def send_conversation(
+        self, conversation: "Conversation", **kwargs
+    ) -> "Message":
         """Send a conversation to the OpenAI API."""
 
         from ..models import Message
 
         messages = [
-            {"role": msg.role, "content": msg.text} for msg in conversation.messages
+            {"role": msg.role, "content": msg.text}
+            for msg in conversation.messages
         ]
 
         response = self.client.chat.completions.create(
-            model=conversation.llm_model or DEFAULT_MODEL, messages=messages, **kwargs
+            model=conversation.llm_model or DEFAULT_MODEL,
+            messages=messages,
+            **kwargs,
         )
 
         # Get the response content from the OpenAI response
@@ -69,7 +74,12 @@ class Amazon(BaseProvider):
         )
 
     def structured_response(
-        self, prompt, response_model: Type[T], *, llm_model: str | None = None, **kwargs
+        self,
+        prompt,
+        response_model: Type[T],
+        *,
+        llm_model: str | None = None,
+        **kwargs,
     ) -> T:
         # Ensure messages are provided in kwargs
         messages = [

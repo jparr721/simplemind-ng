@@ -28,7 +28,9 @@ class MoodDetectorPlugin(sm.BasePlugin):
         console.print(f"🟢 Positive: [green]{scores['pos']:.3f}[/green]")
         console.print(f"🔴 Negative: [red]{scores['neg']:.3f}[/red]")
         console.print(f"⚪ Neutral: [blue]{scores['neu']:.3f}[/blue]")
-        console.print(f"📊 Compound: [yellow]{scores['compound']:.3f}[/yellow]\n")
+        console.print(
+            f"📊 Compound: [yellow]{scores['compound']:.3f}[/yellow]\n"
+        )
 
         if scores["compound"] >= 0.5:
             console.print("Overall Mood: [green]positive[/green] 😊")
@@ -47,24 +49,26 @@ class MoodDetectorPlugin(sm.BasePlugin):
             mood = self.detect_mood(last_message.text)
             # Adjust AI response style based on the detected mood
             if mood == "positive":
-                tone_message = (
-                    "The user seems cheerful. Respond with enthusiasm and positivity."
-                )
+                tone_message = "The user seems cheerful. Respond with enthusiasm and positivity."
             elif mood == "negative":
                 tone_message = "The user seems to be in a low mood. Respond with empathy and warmth."
             else:
-                tone_message = "The user seems neutral. Respond with a balanced tone."
+                tone_message = (
+                    "The user seems neutral. Respond with a balanced tone."
+                )
 
             # Inject the tone adjustment message as a system prompt
             conversation.add_message(role="system", text=tone_message)
 
 
 # Create a conversation and add the plugin
-conversation = sm.create_conversation(llm_model="gpt-4o-mini", llm_provider="openai")
+conversation = sm.create_conversation(
+    llm_model="gpt-4o-mini", llm_provider="openai"
+)
 conversation.add_plugin(MoodDetectorPlugin())
 
 # Add a user message and send the conversation
 conversation.add_message(role="user", text="I'm having a really rough day.")
 response = conversation.send()
 
-console.print(f"*{ response.text }*")
+console.print(f"*{response.text}*")

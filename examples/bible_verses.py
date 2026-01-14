@@ -33,7 +33,9 @@ class CrossReference(BaseModel):
     anthropic_perspective: str
 
 
-def get_passage(book: str, chapter: int, translation: str = "ESV") -> BiblePassage:
+def get_passage(
+    book: str, chapter: int, translation: str = "ESV"
+) -> BiblePassage:
     passage = gpt_4o_mini.generate_data(
         prompt=f"""Return {book} chapter {chapter} from the {translation} translation.
 Format each verse as plain text without any special characters or formatting.
@@ -49,7 +51,9 @@ Return only the biblical text, formatted as a BiblePassage object.""",
 
 
 def get_cross_reference(passage: BiblePassage) -> CrossReference:
-    verses_text = "\n".join([f"Verse {v.verse}: {v.text}" for v in passage.verses])
+    verses_text = "\n".join(
+        [f"Verse {v.verse}: {v.text}" for v in passage.verses]
+    )
 
     # Get main cross-reference from OpenAI
     ref = gpt_4o_mini.generate_data(
@@ -72,7 +76,7 @@ Original passage:
 {verses_text}
 
 Cross-reference passage:
-{' '.join([f'Verse {v.verse}: {v.text}' for v in ref.passage.verses])}
+{" ".join([f"Verse {v.verse}: {v.text}" for v in ref.passage.verses])}
 
 Provide a thoughtful analysis focusing on the philosophical and ethical implications of these passages, drawing from your training in ethics and philosophy.
 Return your response as a plain string.""",
@@ -94,7 +98,9 @@ def pretty_print_reference(ref: CrossReference):
     origin_text.append(f"{ref.origin_verse.text}\n", style="italic")
     origin_text.append(f"\n({ref.origin_verse.translation})", style="dim")
 
-    origin_panel = Panel(origin_text, title="Original Passage", border_style="blue")
+    origin_panel = Panel(
+        origin_text, title="Original Passage", border_style="blue"
+    )
 
     # Create cross reference panel
     ref_text = Text()
@@ -115,7 +121,9 @@ def pretty_print_reference(ref: CrossReference):
         notes_text.append("• ", style="yellow")
         notes_text.append(f"{note}\n")
 
-    notes_panel = Panel(notes_text, title="Thematic Connections", border_style="yellow")
+    notes_panel = Panel(
+        notes_text, title="Thematic Connections", border_style="yellow"
+    )
 
     # Add new AI perspective panel
     ai_text = Text()

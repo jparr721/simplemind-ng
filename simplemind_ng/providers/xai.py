@@ -48,12 +48,15 @@ class XAI(BaseProvider):
         return instructor.from_openai(self.client)
 
     @logger
-    def send_conversation(self, conversation: "Conversation", **kwargs) -> "Message":
+    def send_conversation(
+        self, conversation: "Conversation", **kwargs
+    ) -> "Message":
         """Send a conversation to the OpenAI API."""
         from ..models import Message
 
         messages = [
-            {"role": msg.role, "content": msg.text} for msg in conversation.messages
+            {"role": msg.role, "content": msg.text}
+            for msg in conversation.messages
         ]
 
         response = self.client.chat.completions.create(

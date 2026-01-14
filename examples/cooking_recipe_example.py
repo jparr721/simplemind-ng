@@ -31,9 +31,17 @@ class Recipe(BaseModel):
         ingredients_text = Text("\n📝 INGREDIENTS:\n", style="bold green")
         for ing in self.ingredients:
             # Format numbers to avoid floating decimals when whole numbers
-            quantity = int(ing.quantity) if ing.quantity.is_integer() else ing.quantity
-            ingredients_text.append(f"  • {quantity} {ing.unit} ", style="bright_white")
-            ingredients_text.append(f"{ing.name}\n", style="italic bright_white")
+            quantity = (
+                int(ing.quantity)
+                if ing.quantity.is_integer()
+                else ing.quantity
+            )
+            ingredients_text.append(
+                f"  • {quantity} {ing.unit} ", style="bright_white"
+            )
+            ingredients_text.append(
+                f"{ing.name}\n", style="italic bright_white"
+            )
 
         # Format instructions with better spacing and styling
         instructions_text = Text("\n👩‍🍳 INSTRUCTIONS:\n", style="bold yellow")
@@ -41,7 +49,9 @@ class Recipe(BaseModel):
             instructions_text.append(
                 f"\n  {step.step_number}. ", style="bold bright_white"
             )
-            instructions_text.append(f"{step.instruction}", style="bright_white")
+            instructions_text.append(
+                f"{step.instruction}", style="bright_white"
+            )
 
         # Combine all text
         full_text = Text.assemble(

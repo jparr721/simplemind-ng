@@ -6,7 +6,7 @@ from _context import simplemind_ng as sm
 
 
 def analyze_text(
-    text: Annotated[str, Field(description="Text to analyze for statistics")]
+    text: Annotated[str, Field(description="Text to analyze for statistics")],
 ) -> dict:
     """
     Analyze text and return statistics using only Python's standard library.
@@ -22,7 +22,9 @@ def analyze_text(
     stats = {
         "word_count": len(words),
         "character_count": len(text),
-        "average_word_length": round(sum(len(word) for word in words) / len(words), 2),
+        "average_word_length": round(
+            sum(len(word) for word in words) / len(words), 2
+        ),
         "most_common_words": dict(Counter(words).most_common(5)),
         "unique_words": len(set(words)),
         "longest_word": max(words, key=len),

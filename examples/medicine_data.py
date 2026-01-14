@@ -33,7 +33,7 @@ session = sm.Session(llm_provider="openai", llm_model="gpt-4o-mini")
 # Update the prompt to use an f-string with a parameter
 def get_medication_prompt(medications: list[str]) -> str:
     return f"""
-Provide detailed medical information about {', '.join(medications)}.
+Provide detailed medical information about {", ".join(medications)}.
 Include their generic names, drug classes, half-lives, common uses, side effects (with severity and frequency),
 typical dosages, and important warnings.
 Return the information as separate medication entries.
@@ -45,7 +45,9 @@ medications_to_lookup = ["Abilify (aripiprazole)", "Trileptal (oxcarbazepine)"]
 prompt = get_medication_prompt(medications_to_lookup)
 
 # Generate structured data for medications
-medications = session.generate_data(prompt=prompt, response_model=MedicationList)
+medications = session.generate_data(
+    prompt=prompt, response_model=MedicationList
+)
 
 # Create a Rich console
 console = Console()
@@ -66,9 +68,11 @@ for med in medications.root:
     # Create a nested table for side effects
     effects_table = Table(show_header=False, box=None, padding=(0, 2))
     for effect in med.side_effects:
-        severity_color = {"mild": "green", "moderate": "yellow", "severe": "red"}.get(
-            effect.severity.lower(), "white"
-        )
+        severity_color = {
+            "mild": "green",
+            "moderate": "yellow",
+            "severe": "red",
+        }.get(effect.severity.lower(), "white")
         effects_table.add_row(
             "•",
             effect.effect,
@@ -89,6 +93,8 @@ for med in medications.root:
 
     # Create and print a panel for each medication
     console.print(
-        Panel(table, title=f"[bold blue]{med.brand_name}[/]", border_style="blue")
+        Panel(
+            table, title=f"[bold blue]{med.brand_name}[/]", border_style="blue"
+        )
     )
     console.print()  # Add a blank line between medications

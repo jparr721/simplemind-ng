@@ -47,17 +47,31 @@ class Settings(BaseSettings):
     ANTHROPIC_API_KEY: Optional[SecretStr] = Field(
         None, description="API key for Anthropic"
     )
-    GROQ_API_KEY: Optional[SecretStr] = Field(None, description="API key for Groq")
-    GEMINI_API_KEY: Optional[SecretStr] = Field(None, description="API key for Gemini")
-    OPENAI_API_KEY: Optional[SecretStr] = Field(None, description="API key for OpenAI")
-    OLLAMA_HOST_URL: Optional[str] = Field(
-        "http://127.0.0.1:11434", description="Fully qualified host URL for Ollama"
+    GROQ_API_KEY: Optional[SecretStr] = Field(
+        None, description="API key for Groq"
     )
-    XAI_API_KEY: Optional[SecretStr] = Field(None, description="API key for xAI")
-    DEFAULT_LLM_PROVIDER: str = Field("openai", description="The default LLM provider")
+    GEMINI_API_KEY: Optional[SecretStr] = Field(
+        None, description="API key for Gemini"
+    )
+    OPENAI_API_KEY: Optional[SecretStr] = Field(
+        None, description="API key for OpenAI"
+    )
+    OLLAMA_HOST_URL: Optional[str] = Field(
+        "http://127.0.0.1:11434",
+        description="Fully qualified host URL for Ollama",
+    )
+    XAI_API_KEY: Optional[SecretStr] = Field(
+        None, description="API key for xAI"
+    )
+    DEFAULT_LLM_PROVIDER: str = Field(
+        "openai", description="The default LLM provider"
+    )
 
     model_config = SettingsConfigDict(
-        env_file=".env", env_file_encoding="utf-8", case_sensitive=True, extra="ignore"
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=True,
+        extra="ignore",
     )
     logging: LoggingConfig = LoggingConfig()
 

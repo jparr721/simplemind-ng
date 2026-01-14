@@ -18,9 +18,9 @@ T = TypeVar("T", bound=BaseModel)
 class AnthropicTool(BaseTool):
     def get_response_schema(self) -> Any:
         assert self.is_executed, f"Tool {self.name} was not executed."
-        assert isinstance(
-            self.tool_id, str
-        ), f"Expected str for `tool_id` got {self.tool_id!r}"
+        assert isinstance(self.tool_id, str), (
+            f"Expected str for `tool_id` got {self.tool_id!r}"
+        )
         return {
             "type": "tool_result",
             "tool_use_id": self.tool_id,
@@ -155,7 +155,11 @@ class Anthropic(BaseProvider):
 
     @logger
     def structured_response(
-        self, response_model: Type[T], *, llm_model: str | None = None, **kwargs
+        self,
+        response_model: Type[T],
+        *,
+        llm_model: str | None = None,
+        **kwargs,
     ) -> T:
         model = llm_model or self.DEFAULT_MODEL
 

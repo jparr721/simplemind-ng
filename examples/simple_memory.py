@@ -16,7 +16,9 @@ class SimpleMemoryPlugin:
             conversation.prepend_system_message(text=m)
 
 
-conversation = sm.create_conversation(llm_model="grok-beta", llm_provider="xai")
+conversation = sm.create_conversation(
+    llm_model="grok-beta", llm_provider="xai"
+)
 conversation.add_plugin(SimpleMemoryPlugin())
 
 conversation.add_message(

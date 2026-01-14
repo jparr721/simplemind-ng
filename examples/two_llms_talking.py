@@ -6,7 +6,9 @@ import simplemind_ng as sm
 class ConversationPlugin(sm.BasePlugin):
     def post_send_hook(self, conversation, response):
         # Print the LLM model and the response text.
-        print(f"{conversation.llm_model}:\n{response.text.strip()}\n\n------------\n")
+        print(
+            f"{conversation.llm_model}:\n{response.text.strip()}\n\n------------\n"
+        )
 
 
 def have_conversation(rounds: int = 3):
@@ -19,7 +21,6 @@ def have_conversation(rounds: int = 3):
             llm_model="llama3.2", llm_provider="ollama"
         ) as llama_conv,
     ):
-
         # Add our plugin to both
         plugin = ConversationPlugin()
         claude_conv.add_plugin(plugin)

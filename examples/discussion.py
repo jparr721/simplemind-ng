@@ -24,8 +24,9 @@ class MultiAIConversation:
         ),
     }
 
-    def __init__(self, topic: str, turns_per_model: int = 1, max_rounds: int = 5):
-
+    def __init__(
+        self, topic: str, turns_per_model: int = 1, max_rounds: int = 5
+    ):
         self.topic = topic
         self.turns_per_model = turns_per_model
         self.max_rounds = max_rounds
@@ -56,7 +57,9 @@ Current discussion topic: {self.topic}"""
         conv.add_message(role="user", text=self._format_system_prompt(ai_name))
 
         # Add conversation history
-        for speaker, message in self.conversation_history[-3:]:  # Last 3 messages
+        for speaker, message in self.conversation_history[
+            -3:
+        ]:  # Last 3 messages
             conv.add_message(role="user", text=f"{speaker} said: {message}")
 
         return conv
@@ -70,7 +73,9 @@ Current discussion topic: {self.topic}"""
 
     def _get_user_input(self) -> str:
         """Gets input from the user for the discussion."""
-        self.console.print("\n[bold green]Your turn! Share your thoughts:[/bold green]")
+        self.console.print(
+            "\n[bold green]Your turn! Share your thoughts:[/bold green]"
+        )
         user_response = input("> ")
         self._print_response(self.user_name, user_response)
         return user_response
@@ -84,12 +89,16 @@ Current discussion topic: {self.topic}"""
         self._get_user_input()
 
         for round_num in range(self.max_rounds):
-            self.console.print(f"\n[bold green]Round {round_num + 1}[/bold green]")
+            self.console.print(
+                f"\n[bold green]Round {round_num + 1}[/bold green]"
+            )
 
             # Let all AI models respond
             for model_name, session in self.MODEL_SESSIONS.items():
                 for turn in range(self.turns_per_model):
-                    conversation = self._create_conversation(session, model_name)
+                    conversation = self._create_conversation(
+                        session, model_name
+                    )
 
                     # Add the prompt (simplified since human always starts)
                     prompt = f"Continue the discussion about {self.topic}, responding to the previous points made."
